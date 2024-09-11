@@ -11,58 +11,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  List <Widget> products = [];
-
-  callApi() async {
-    var url = Uri.https('fakestoreapi.com', 'products');
-    var response = await http.get(url);
-
-    setState(() {
-      List data = jsonDecode(response.body);
-      //print(data[0]['title']);
-
-      // data.forEach((prodct){
-      //   products.add(Text(prodct['title']));
-      // });
-      List <Widget> allData = [];
-      for (var prodct in data) {
-        allData.add(ListTile(title: Text(prodct['title'])));
-      }
-
-      setState(() {
-        products = allData;
-      });
-
-    });
-
-    print(response.body);
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
-
-    // print(await http.read(Uri.https('example.com', 'foobar.txt')));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column( mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: TextButton(
-              onPressed: () {
-                callApi();
-              },
-              child: const Text("Call API"),
-            ),
-          ),
           SizedBox(
             width: 300,
             height: 500,
-            child: ListView(children: products),
+            child: FutureBuilder<List>(
+                future: getData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Image.network(
+                                snapshot.data![index]["image"],
+                                width: 150,
+                              ),
+                              Text(
+                                snapshot.data![index]["title"],
+                              )
+                            ],
+                          );
+                        });
+                  }
+                }),
           )
         ],
       ),
     );
+  }
+
+  Future<List> getData() async {
+    var url = Uri.https('fakestoreapi.com', 'products');
+    var response = await http.get(url);
+    return jsonDecode(response.body);
   }
 }
