@@ -1,9 +1,22 @@
+import 'package:e_commerce_project/providers/heart_provider.dart';
+import 'package:e_commerce_project/providers/product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (BuildContext context) => ProductProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (BuildContext context) => HeartProvider(),
+      ),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
