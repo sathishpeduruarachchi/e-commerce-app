@@ -1,3 +1,4 @@
+import 'package:e_commerce_project/providers/cart_provider.dart';
 import 'package:e_commerce_project/providers/heart_provider.dart';
 import 'package:e_commerce_project/providers/product_provider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (BuildContext context) => HeartProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (BuildContext context) => CartProvider(),
       ),
     ],
     child: const MyApp(),
