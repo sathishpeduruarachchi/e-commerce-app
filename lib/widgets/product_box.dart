@@ -1,6 +1,8 @@
 import 'package:e_commerce_project/models/product.dart';
+import 'package:e_commerce_project/providers/cart_provider.dart';
 import 'package:e_commerce_project/screens/product_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductBox extends StatelessWidget {
   const ProductBox({
@@ -16,8 +18,12 @@ class ProductBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ProductScreen(product: product,)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductScreen(
+                        product: product,
+                      )));
         },
         child: Container(
           height: 315,
@@ -47,6 +53,15 @@ class ProductBox extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text("\$ ${product.price}"),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [IconButton(onPressed: (){
+                    context.read<CartProvider>().addProduct(product);
+                  }, icon: const Icon(Icons.add_circle))],
+                ),
               )
             ],
           ),

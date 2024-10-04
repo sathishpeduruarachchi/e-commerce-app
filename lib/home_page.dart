@@ -1,7 +1,10 @@
 import 'package:e_commerce_project/models/product.dart';
+import 'package:e_commerce_project/screens/cart_screen.dart';
 import 'package:e_commerce_project/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'providers/cart_provider.dart';
 import 'widgets/product_box.dart';
 import 'widgets/product_card.dart';
 
@@ -41,25 +44,61 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 35),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 35),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(right: 150),
                   child: Text(
-                    "OMG",
+                    "BYC",
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Icon(Icons.person_pin_rounded),
-                )
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Stack(
+                    children: [
+                      const Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 30,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartScreen(),
+                            ),
+                          );
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.amberAccent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(child: Consumer<CartProvider>(
+                                builder: (context, cartData, child) {
+                              return Text(
+                                cartData.itemCount.toString(),
+                                // style: TextStyle(fontSize: 12),
+                              );
+                            })),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -102,7 +141,7 @@ class _HomePageState extends State<HomePage> {
               )),
           // displaying category details
           SizedBox(
-            height: 330,
+            height: 374,
             // width: 500,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -135,40 +174,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-
-
-// SizedBox(
-          //   width: 400,
-          //   height: 500,
-          //   child: FutureBuilder<List>(
-          //       future: getData(),
-          //       builder: (context, snapshot) {
-          //         if (snapshot.connectionState == ConnectionState.waiting) {
-          //           return const Center(
-          //             child: CircularProgressIndicator(),
-          //           );
-          //         } else {
-          //           return ListView.builder(
-          //               itemCount: snapshot.data!.length,
-          //               itemBuilder: (context, index) {
-          // Product product =
-          //     Product.fromJson(snapshot.data![index]);
-          //                 return Column(
-          //                   children: [
-          // Image.network(
-          //   //snapshot.data![index]["image"],
-          //   product.image!,
-          //   width: 150,
-          // ),
-          // Text(
-          //     // snapshot.data![index]["title"],
-          //     product.title!)
-          //                   ],
-          //                 );
-          //               });
-          //         }
-          //       }),
-          // )
